@@ -21,7 +21,7 @@ def DescribeUHostInstance(Region,UHostId):
                }
     response = ApiClient.get("/", Parameters);
     print json.dumps(response, sort_keys=True, indent=4, separators=(',', ': '))
-    ApiClient = UcloudApiClient(base_url, public_key, private_key)
+    
 
 #输入环境与主机ID查镜像名
 def CreateCustomImage(Region,UHostId,ImageName):
@@ -35,7 +35,7 @@ def CreateCustomImage(Region,UHostId,ImageName):
                }
     response = ApiClient.get("/", Parameters);
     print json.dumps(response, sort_keys=True, indent=4, separators=(',', ': '))
-    ApiClient = UcloudApiClient(base_url, public_key, private_key)
+    
 
 #输入镜像名查镜像ID
 def FindCustomImageId(Region,ImageName):
