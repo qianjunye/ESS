@@ -7,7 +7,7 @@ import sys
 import time
 import json
 
-#获取参数执行请求URL
+#获取参数，执行请求URL
 def Request(Parameters):
     rg_length = len(sys.argv)
     ApiClient = UcloudApiClient(base_url, public_key, private_key)
@@ -23,7 +23,11 @@ def DescribeUHostInstance(Region,UHostId):
                }
     return Request(Parameters)
 
-
+def GetHWInfo(Region,slaver):
+    InstanceInfo = eval(DescribeUHostInstance(Region,slaver))
+    CPUInfo = InstanceInfo["UHostSet"][0]["CPU"]
+    MemInfo = InstanceInfo["UHostSet"][0]["Memory"]
+    return {"CPUInfo":CPUInfo,"MemInfo":MemInfo}
 
 #输入环境与主机ID查镜像名
 def CreateCustomImage(Region,UHostId,ImageName):
@@ -35,9 +39,8 @@ def CreateCustomImage(Region,UHostId,ImageName):
                }
     return Request(Parameters)
 
-
 #输入镜像名查镜像ID
-def FindCustomImageId(Region,ImageName):
+def SearchCustomImageId(Region,ImageName):
     Parameters = {
                     "Action":"DescribeImage",
                     "Limit":"100",
@@ -56,13 +59,32 @@ def FindCustomImageId(Region,ImageName):
         print "Get ID ERROR"
         return "NULL"
 
+def CreateUHostInstance(Region,ImageId,CPU,Memory,Name):
+    ApiClient = UcloudApiClient(base_url, public_key, private_key)
+    Parameters={
+            "Action":"CreateUHostInstance",
+            "Region":Region,
+            "ImageId":ImageId,
+            "LoginMode":"Password",
+            "Password":"VWNsb3VkUGFzc3dk",
+            "CPU":CPU,
+            "Memory":Memory,
+            "Name":Name,
+            "ChargeType": "Dynamic",
+            }
+    return Request(Parameters)
+
+
 
 if __name__=='__main__':
-    #a=DescribeUHostInstance("cn-north-03","uhost-ikzxb3")
-    #print a
-    #ImageName="Junye"+time.strftime('%Y-%m-%d_%H:%M:%S',time.localtime(time.time()))
-    #print ImageName
-    #CreateCustomImage(Region,"uhost-ikzxb3",ImageName)
-    ID = FindCustomImageId(Region,"william")
-    print(ID)
+    ImageName=ImageNamePrefix+time.strftime('%Y-%m-%d_%H:%M:%S',time.localtime(time.time()))
+    ImageID=eval(CreateCustomImage(Region,slaver,ImageName))["ImageId"]
+    HardWareInFo=GetHWInfo(Region,slaver)
+    #print HardWareInFo["CPUInfo"]
+    newinstance=CreateUHostInstance(Region,ImageID,HardWareInFo["CPUInfo"],HardWareInFo["MemInfo"],"Name")
+    newinstanceid=eval(newinstance)["UHostIds"][0]
+    #print slaver
+    #CreateCustomImage(Region,slaver,ImageName)
+    #ID = SearchCustomImageId(Region,"william")
+    #print(ID)
 
