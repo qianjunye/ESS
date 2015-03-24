@@ -80,8 +80,9 @@ def CreateUHostInstance(Region,ImageId,CPU,Memory,Name):
 
 
 if __name__=='__main__':
-    #根据config.py中的配置，确定是复制slaver还是从镜像生成
+    #镜像名用于区分主机类型
     InstanceName="Fastigium"+time.strftime('%Y-%m-%d_%H:%M:%S',time.localtime(time.time()))
+    #根据config.py中的配置，确定是复制slaver还是从镜像生成
     if Source == "instance":
         ImageName=ImageNamePrefix+time.strftime('%Y-%m-%d_%H:%M:%S',time.localtime(time.time()))
         ImageID=eval(CreateCustomImage(Region,slaver,ImageName))["ImageId"]
@@ -94,12 +95,16 @@ if __name__=='__main__':
             newinstance=CreateUHostInstance(Region,ImageID,CPUInFo,MemInFo,InstanceName)
             newinstanceid=eval(newinstance)["UHostIds"][0]
     else:
+        GetImageID=SearchCustomImageId(Region,SourceImageName)
         if HW == "copy":
             HardWareInFo=GetHWInfo(Region,slaver)
-            newinstance=CreateUHostInstance(Region,SourceImageName,HardWareInFo["CPUInfo"],HardWareInFo["MemInfo"],InstanceName)
+            newinstance=CreateUHostInstance(Region,GetImageID,HardWareInFo["CPUInfo"],HardWareInFo["MemInfo"],InstanceName)
             newinstanceid=eval(newinstance)["UHostIds"][0]
         else:
-            newinstance=CreateUHostInstance(Region,SourceImageName,CPUInFo,MemInFo,InstanceName)
+            newinstance=CreateUHostInstance(Region,GetImageID,CPUInFo,MemInFo,InstanceName)
             newinstanceid=eval(newinstance)["UHostIds"][0]
+    FastigiumInstanceFile=open(FastigiumInstance,'a')
+    FastigiumInstanceFile.write(newinstanceid+'\n')
+    FastigiumInstanceFile.close()
 
 
