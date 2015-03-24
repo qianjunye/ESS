@@ -18,3 +18,9 @@ slaver	=	""
 
 #当Source为image时用下面的镜像名生成机器
 SourceImageName="UcloudImage2015-03-24_14:26:34"
+
+#新机器的硬件信息
+HW = "copy"                     #值为copy或者defined，如果值为copy则与slaver的相同，其他值则使用下面的指定值
+
+CPUInFo="1"
+MemInFo="1024"                     #MB 范围[2048,65536]， 步长：2048， 默认值：8192
