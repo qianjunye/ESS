@@ -10,7 +10,7 @@ import json
 import time
 import subprocess
 
-
+#监控CPU占用，到一定值后自动生成主机，并且加到SLB中，主机删除功能不完整，且从UAPI中有时会数据不足
 if __name__=='__main__':
     while(1):
         Metric=GetMetric(360,Region,slaver)#时间精度不够，60秒可能获取不到数据建议拉长，得到的360秒内的硬件平均值
