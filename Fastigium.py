@@ -11,7 +11,7 @@ import json
 
 #高峰期由crontab执行
 
-
+#生成主机且自动加入SUB，
 if __name__=='__main__':
     #镜像名用于区分主机类型
     InstanceName="Fastigium"+time.strftime('%Y-%m-%d_%H:%M:%S',time.localtime(time.time()))
