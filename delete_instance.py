@@ -11,7 +11,7 @@ import time
 
 #高峰期由crontab执行
 
-
+#高峰期后由cront做执行操作
 if __name__=='__main__':
     #读取FastigiumInstance.txt中的实例ID，批量删除
     #建议U提供强制关机API
