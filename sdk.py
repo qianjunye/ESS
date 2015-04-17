@@ -1,4 +1,5 @@
 #-*- encoding: utf-8 -*-
+#U Python SDK中的原文件
 import hashlib,json,httplib
 import urlparse
 import urllib
